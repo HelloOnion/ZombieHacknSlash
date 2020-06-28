@@ -9,12 +9,11 @@ public class ThirdPersonController : MonoBehaviour
     public Transform cam;
 
     //Movement
-    float Speed = 2f;
+    public bool isAttacking = false;
+    float speed = 2f;
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
     public float walkSpeed = 2f;
-    public float sprintSpeed = 5f;
-    bool sprint = false;
 
     //Gravity
     Vector3 velocity;
@@ -28,16 +27,26 @@ public class ThirdPersonController : MonoBehaviour
 
     //Animation
     public Animator animator;
+    public float attackAnimTimer = 1;
 
 
     void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        speed = walkSpeed;
     }
     void Update()
     {
-        Movement();
+        if (!isAttacking)
+        {
+            Movement();
+        }
+        else
+        {
+            StartCoroutine(resetMovement());
+        }
+
         GravityCheck();
     }
 
@@ -47,18 +56,6 @@ public class ThirdPersonController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
-
-        //Sprint Trigger
-        if (Input.GetButtonDown("Sprint") && !sprint)
-        {
-            Speed = sprintSpeed;
-            sprint = true;
-        }
-        if (Input.GetButtonUp("Sprint") && sprint)
-        {
-            Speed = walkSpeed;
-            sprint = false;
-        }
 
         //Movement & Camera
         if (direction.magnitude >= 0.1)
@@ -70,10 +67,9 @@ public class ThirdPersonController : MonoBehaviour
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-
-
-            controller.Move(moveDir.normalized * Speed * Time.deltaTime);
+            controller.Move(moveDir.normalized * speed * Time.deltaTime);
         }
+
 
         //Jump
         if (isGrounded && velocity.y < 0)
@@ -83,12 +79,11 @@ public class ThirdPersonController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            animator.SetTrigger("Jump");
         }
 
         //Animation
         animator.SetFloat("Magnitude", direction.magnitude);
-        animator.SetBool("Sprint", sprint);
-
     }
 
     private void GravityCheck()
@@ -96,6 +91,17 @@ public class ThirdPersonController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+     IEnumerator resetMovement()
+    {
+        yield return new WaitForSeconds(attackAnimTimer);
+        isAttacking = false;
+    }
+
+    public bool GetIsGrounded()
+    {
+        return isGrounded;
     }
 }
 
