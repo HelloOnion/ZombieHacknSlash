@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -43,6 +44,9 @@ public class PlayerController : MonoBehaviour
     public float currentHealth;
     private float maxHealth = 100f;
 
+    //UI
+    public Image hpBar;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -75,6 +79,12 @@ public class PlayerController : MonoBehaviour
                     nextAttackTime = Time.time + 1f / attackRate;
                 }
             }
+
+            //Update UI
+            UpdateUI();
+
+            //damage debug test
+            if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
         }
     }
 
@@ -154,12 +164,21 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+
+        if (currentHealth <= 0) Die();
     }
 
     void Die()
     {
         isDead = true;
         animator.SetBool("isDead", true);
+        this.enabled = false;
+    }
+
+    void UpdateUI()
+    {
+        //UI
+        hpBar.fillAmount = currentHealth / 100;
     }
 
 }
