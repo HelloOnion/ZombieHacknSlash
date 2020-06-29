@@ -9,12 +9,14 @@ public class PlayerController : MonoBehaviour
     public Transform cam;
 
     //Movement
+    [Header("Movement")]
     float speed = 2f;
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
     public float walkSpeed = 2f;
 
     //Jump & Gravity
+    [Header("Gravity & Jump")]
     Vector3 velocity;
     public float gravity = -9.81f;
     public Transform groundCheck;
@@ -37,12 +39,13 @@ public class PlayerController : MonoBehaviour
     bool isAttacking = false;
 
     //Misc
-    public float plHealth;
+    bool isDead = false;
+    public float currentHealth;
     private float maxHealth = 100f;
 
     void Start()
     {
-        plHealth = maxHealth;
+        currentHealth = maxHealth;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         speed = walkSpeed;
@@ -50,25 +53,28 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (!isAttacking)
+        if(!isDead)
         {
-            Movement();
-        }
-        else
-        {
-            StartCoroutine(resetMovement());
-        }
-
-        GravityCheck();
-
-        if (Time.time >= nextAttackTime)
-        {
-            if (Input.GetButtonDown("Fire1") && isGrounded)
+            if (!isAttacking)
             {
-                isAttacking = true;
-                Attack();
-                nextAttackTime = Time.time + 1f / attackRate;
-            }  
+                Movement();
+            }
+            else
+            {
+                StartCoroutine(resetMovement());
+            }
+
+            GravityCheck();
+
+            if (Time.time >= nextAttackTime)
+            {
+                if (Input.GetButtonDown("Fire1") && isGrounded)
+                {
+                    // isAttacking = true;
+                    Attack();
+                    nextAttackTime = Time.time + 1f / attackRate;
+                }
+            }
         }
     }
 
@@ -143,6 +149,17 @@ public class PlayerController : MonoBehaviour
 
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+    }
+
+    void Die()
+    {
+        isDead = true;
+        animator.SetBool("isDead", true);
     }
 
 }
