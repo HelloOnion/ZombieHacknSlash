@@ -11,10 +11,10 @@ public class PlayerController : MonoBehaviour
 
     //Movement
     [Header("Movement")]
-    float speed = 2f;
     public float turnSmoothTime = 0.1f;
-    float turnSmoothVelocity;
     public float walkSpeed = 2f;
+    private float speed = 2f;
+    private float turnSmoothVelocity;
 
     //Jump & Gravity
     [Header("Gravity & Jump")]
@@ -23,8 +23,8 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-    bool isGrounded;
     public float jumpHeight = 3f;
+    private bool isGrounded;
 
     //Animation
     public Animator animator;
@@ -36,16 +36,14 @@ public class PlayerController : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
     public float attackRate = 2f;
-    float nextAttackTime = 0f;
-    bool isAttacking = false;
+    private float nextAttackTime = 0f;
+    private bool isAttacking = false;
 
     //Misc
     bool isDead = false;
-    public float currentHealth;
     private float maxHealth = 100f;
-
-    //UI
-    public Image hpBar;
+    [SerializeField]
+    private float currentHealth;
 
     void Start()
     {
@@ -75,13 +73,15 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButtonDown("Fire1") && isGrounded)
                 {
                     // isAttacking = true;
-                    Attack();
+                    LightAttack();
+                    nextAttackTime = Time.time + 1f / attackRate;
+                }
+                if(Input.GetButtonDown("Fire2") && isGrounded)
+                {
+                    HeavyAttack();
                     nextAttackTime = Time.time + 1f / attackRate;
                 }
             }
-
-            //Update UI
-            UpdateUI();
 
             //damage debug test
             if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
@@ -129,6 +129,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+        animator.SetBool("isGrounded", isGrounded);
     }
 
     IEnumerator resetMovement()
@@ -137,11 +138,24 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
     }
 
-    void Attack()
+    void LightAttack()
     {
-        //attack Animation
-        animator.SetTrigger("Attack");
+        //light attack Animation
+        animator.SetTrigger("LightAttack");
 
+        EnemyHitCheck();
+    }
+
+    void HeavyAttack()
+    {
+        //heavy attack Animation
+        animator.SetTrigger("HeavyAttack");
+
+        EnemyHitCheck();
+    }
+
+    void EnemyHitCheck()
+    {
         //Detect enemies in range of attack
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
@@ -164,7 +178,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-
+        animator.SetTrigger("Hurt");
         if (currentHealth <= 0) Die();
     }
 
@@ -175,11 +189,7 @@ public class PlayerController : MonoBehaviour
         this.enabled = false;
     }
 
-    void UpdateUI()
-    {
-        //UI
-        hpBar.fillAmount = currentHealth / 100;
-    }
+    public float GetCurrentHealth() { return currentHealth; }
 
 }
 
