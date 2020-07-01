@@ -29,9 +29,6 @@ public class PlayerController : MonoBehaviour
     //Animation
     public float attackAnimTimer = 1;
     private Animator animator;
-    private AnimatorClipInfo[] currentClipInfo;
-    private string animClipName;
-
     
     //Combat
     public int attackDamage = 40;
@@ -39,8 +36,10 @@ public class PlayerController : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
     public float attackRate = 2f;
+    public Collider hitCollider;
     private float nextAttackTime = 0f;
     private bool isAttacking = false;
+
 
     //Misc
     private bool isDead = false;
@@ -86,9 +85,6 @@ public class PlayerController : MonoBehaviour
                     nextAttackTime = Time.time + 1f / attackRate;
                 }
             }
-            //get animation clip name
-            currentClipInfo = animator.GetCurrentAnimatorClipInfo(0);
-            animClipName = currentClipInfo[0].clip.name;
             
             //damage debug test
             if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
@@ -157,7 +153,7 @@ public class PlayerController : MonoBehaviour
         //light attack Animation
         animator.SetTrigger("LightAttack");
 
-        EnemyHitCheck();
+        CheckHit();
     }
 
     void HeavyAttack()
@@ -165,20 +161,21 @@ public class PlayerController : MonoBehaviour
         //heavy attack Animation
         animator.SetTrigger("HeavyAttack");
         
-        EnemyHitCheck();
+        CheckHit();
     }
 
-    void EnemyHitCheck()
+    void CheckHit()
     {
+        hitCollider.enabled = true;
         //Detect enemies in range of attack
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+        //Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
         //Damage Enemy
-        foreach (Collider enemy in hitEnemies)
-        {
-            Debug.Log("Enemy Hit!" + enemy.name);
-            enemy.GetComponent<EnemyController>().TakeDamage(attackDamage);
-        }
+        //foreach (Collider enemy in hitEnemies)
+        //{
+        //    Debug.Log("Enemy Hit!" + enemy.name);
+        //    enemy.GetComponent<EnemyController>().TakeDamage(attackDamage);
+        //}
     }
 
     private void OnDrawGizmosSelected()
@@ -204,11 +201,6 @@ public class PlayerController : MonoBehaviour
     }
 
     public float GetCurrentHealth() { return currentHealth; }
-
-    private void OnGUI()
-    {
-        GUI.Label(new Rect(40, 10, 200, 20), "Anim Name: " + animClipName);
-    }
 
 }
 
