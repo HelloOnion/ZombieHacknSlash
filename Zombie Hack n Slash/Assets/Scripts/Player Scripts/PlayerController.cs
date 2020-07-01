@@ -27,8 +27,11 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
 
     //Animation
-    public Animator animator;
     public float attackAnimTimer = 1;
+    private Animator animator;
+    private AnimatorClipInfo[] currentClipInfo;
+    private string animClipName;
+
     
     //Combat
     public int attackDamage = 40;
@@ -40,7 +43,7 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
 
     //Misc
-    bool isDead = false;
+    private bool isDead = false;
     private float maxHealth = 100f;
     [SerializeField]
     private float currentHealth;
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         speed = walkSpeed;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -82,12 +86,15 @@ public class PlayerController : MonoBehaviour
                     nextAttackTime = Time.time + 1f / attackRate;
                 }
             }
-
+            //get animation clip name
+            currentClipInfo = animator.GetCurrentAnimatorClipInfo(0);
+            animClipName = currentClipInfo[0].clip.name;
+            
             //damage debug test
             if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
         }
     }
-
+    
     private void Movement()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -120,6 +127,13 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Jump");
         }
 
+        //Dash
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+            animator.SetTrigger("Dash");
+        }
+
         //Animation
         animator.SetFloat("Magnitude", direction.magnitude);
     }
@@ -150,7 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         //heavy attack Animation
         animator.SetTrigger("HeavyAttack");
-
+        
         EnemyHitCheck();
     }
 
@@ -175,7 +189,7 @@ public class PlayerController : MonoBehaviour
     
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
@@ -190,6 +204,11 @@ public class PlayerController : MonoBehaviour
     }
 
     public float GetCurrentHealth() { return currentHealth; }
+
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(40, 10, 200, 20), "Anim Name: " + animClipName);
+    }
 
 }
 
