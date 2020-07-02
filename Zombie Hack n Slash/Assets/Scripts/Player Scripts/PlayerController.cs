@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            //controller.Move(moveDir.normalized * speed * Time.deltaTime);
         }
 
 
@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour
 
     void CheckHit()
     {
-        hitCollider.enabled = true;
+        //hitCollider.enabled = true;
         //Detect enemies in range of attack
         //Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 

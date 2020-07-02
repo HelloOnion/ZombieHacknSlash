@@ -200,7 +200,7 @@ public class EnemyController : MonoBehaviour
         var pos = transform.position;
         for (var i = 0; i < 24; i++)
         {
-            if (Physics.Raycast(pos, direction, out hit, Mathf.Infinity))
+            if (Physics.Raycast(pos, direction, out hit, rayDistance))
             {
                 var targetCheck = hit.collider.GetComponent<PlayerController>();
                 if (targetCheck != null)

@@ -5,16 +5,12 @@ using UnityEngine;
 public class EnemyHitCheck : MonoBehaviour
 {
     public PlayerController player;
-    private void OnTriggerEnter(Collider enemy)
+    private void OnTriggerEnter(Collider hit)
     {
-        if(enemy.tag == "Enemy")
+        if(hit.tag == "Enemy")
         {
-            Debug.Log("Enemy Hit!" + enemy.name);
-            enemy.GetComponent<EnemyController>().TakeDamage(player.attackDamage);
-        }
-        else
-        {
-            return;
+            Debug.Log(hit.name);
+            hit.GetComponent<EnemyController>().TakeDamage(player.attackDamage);
         }
     }
 }
