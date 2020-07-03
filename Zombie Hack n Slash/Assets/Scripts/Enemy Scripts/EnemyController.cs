@@ -9,11 +9,12 @@ public class EnemyController : MonoBehaviour
     public int maxHealth = 100;
     public float speed = 1f;
     public float changeStateChance = 50f;
-    public float damage = 10f;
+    public float attackDamage = 10f;
     private Animator animator;
     private int currentHealth;
 
-    [SerializeField] private LayerMask ignoreLayerMask;
+    //[SerializeField] 
+   // private LayerMask ignoreLayerMask;
 
     private float attackRange = 1f;
     private float rayDistance = 5f;
@@ -23,20 +24,27 @@ public class EnemyController : MonoBehaviour
     private Quaternion desiredRotation;
     private Vector3 direction;
     private EnemyState currentState;
-    public PlayerController target;
+    private PlayerController target;
+
+    //FOV TEST
+    public float viewRadius;
+    [Range(0, 360)]
+    public float viewAngle;
+    public LayerMask targetMask;
+    public LayerMask obstacleMask;
 
     void Start()
     {
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
-        currentState = EnemyState.Idle;
+        //currentState = EnemyState.Chase;
     }
 
 
     void Update()
     {
         float changeStateRNG = Random.Range(0f, 1000f);
-        if(currentState == EnemyState.Idle || currentState == EnemyState.Wander)
+        if (currentState == EnemyState.Idle || currentState == EnemyState.Wander)
             RNGState(changeStateRNG);
 
         switch (currentState)
@@ -79,21 +87,47 @@ public class EnemyController : MonoBehaviour
                 }
         }
     }
-
-    private void CheckPlayerInRange()
+    IEnumerator FindTargetsWithDelay(float delay)
     {
-        var targetToAggro = CheckForAggro();
-        if (targetToAggro != null)
+        while (true)
         {
-            target = targetToAggro.GetComponent<PlayerController>();
-            currentState = EnemyState.Chase;
+            yield return new WaitForSeconds(delay);
+            FindVisibleTargets();
+        }
+    }
+    void FindVisibleTargets()
+    {
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
+
+        for (int i = 0; i < targetsInViewRadius.Length; i++)
+        {
+            Transform targetTransform = targetsInViewRadius[i].transform;
+            Vector3 dirToTarget = (targetTransform.position - transform.position).normalized;
+            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
+            {
+                float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
+
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                {
+                    target = targetTransform.GetComponent<PlayerController>();
+                    currentState = EnemyState.Chase;
+                }
+            }
         }
     }
 
+    //private void CheckPlayerInRange()
+    //{
+    //    var targetToAggro = CheckForAggro();
+    //    if (targetToAggro != null)
+    //    {
+    //        target = targetToAggro.GetComponent<PlayerController>();
+    //        currentState = EnemyState.Chase;
+    //    }
+    //}
+
     private void RNGState(float RNG)
     {
-        
-
         if (RNG <= changeStateChance)
         {
             currentState = EnemyState.Wander;
@@ -105,7 +139,8 @@ public class EnemyController : MonoBehaviour
     }
     private void PlayIdle()
     {
-        CheckPlayerInRange();
+       // CheckPlayerInRange();
+        StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
     private void PlayWander()
@@ -128,7 +163,8 @@ public class EnemyController : MonoBehaviour
             GetDestination();
         }
 
-        CheckPlayerInRange();
+        //CheckPlayerInRange();
+        StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
     private void PlayChase()
@@ -141,6 +177,7 @@ public class EnemyController : MonoBehaviour
 
         transform.LookAt(target.transform);
 
+
         if (Vector3.Distance(transform.position, target.transform.position) < attackRange)
         {
             currentState = EnemyState.Attack;
@@ -149,18 +186,16 @@ public class EnemyController : MonoBehaviour
 
     private void PlayAttack()
     {
-        if (target != null)
-        {
-            target.TakeDamage(damage);
-        }
-
-
+        //if (target != null)
+        //{
+        //    target.TakeDamage(damage);
+        //}
     }
 
     private bool IsPathBlocked()
     {
         Ray ray = new Ray(transform.position, direction);
-        var hitSomething = Physics.RaycastAll(ray, rayDistance, ignoreLayerMask);
+        var hitSomething = Physics.RaycastAll(ray, rayDistance, obstacleMask);
         return hitSomething.Any();
     }
 
@@ -190,39 +225,38 @@ public class EnemyController : MonoBehaviour
     Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector3.up);
     Quaternion stepAngle = Quaternion.AngleAxis(5, Vector3.up);
 
-    private Transform CheckForAggro()
-    {
-        float aggroRadius = 5f;
+    //private Transform CheckForAggro()
+    //{
+    //    float aggroRadius = 5f;
 
-        RaycastHit hit;
-        var angle = transform.rotation * startingAngle;
-        var direction = angle * Vector3.forward;
-        var pos = transform.position;
-        for (var i = 0; i < 24; i++)
-        {
-            if (Physics.Raycast(pos, direction, out hit, rayDistance))
-            {
-                var targetCheck = hit.collider.GetComponent<PlayerController>();
-                if (targetCheck != null)
-                {
-                    Debug.DrawRay(pos, direction * hit.distance, Color.red);
-                    Debug.Log(hit.transform.name);
-                    return targetCheck.transform;
-                }
-                else
-                {
-                    Debug.DrawRay(pos, direction * hit.distance, Color.yellow);
-                }
-            }
-            else
-            {
-                Debug.DrawRay(pos, direction * aggroRadius, Color.white);
-            }
-            direction = stepAngle * direction;
-        }
+    //    var angle = transform.rotation * startingAngle;
+    //    var direction = angle * Vector3.forward;
+    //    var pos = transform.position;
+    //    for (var i = 0; i < 24; i++)
+    //    {
+    //        if (Physics.Raycast(pos, direction, out RaycastHit hit, rayDistance))
+    //        {
+    //            var targetCheck = hit.collider.GetComponent<PlayerController>();
+    //            if (targetCheck != null)
+    //            {
+    //                Debug.DrawRay(pos, direction * hit.distance, Color.red);
+    //                Debug.Log(hit.transform.name);
+    //                return targetCheck.transform;
+    //            }
+    //            else
+    //            {
+    //                Debug.DrawRay(pos, direction * hit.distance, Color.yellow);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Debug.DrawRay(pos, direction * aggroRadius, Color.white);
+    //        }
+    //        direction = stepAngle * direction;
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 
     public void TakeDamage(int damage)
     {

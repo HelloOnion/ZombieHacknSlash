@@ -64,10 +64,8 @@ public class PlayerController : MonoBehaviour
             {
                 Movement();
             }
-            else
-            {
-                StartCoroutine(resetMovement());
-            }
+
+            CheckAttacking();
 
             GravityCheck();
 
@@ -142,10 +140,16 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isGrounded", isGrounded);
     }
 
-    IEnumerator resetMovement()
+    private void CheckAttacking()
     {
-        yield return new WaitForSeconds(attackAnimTimer);
-        isAttacking = false;
+        if(animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        {
+            isAttacking = true;
+        }
+        else
+        {
+            isAttacking = false;
+        }
     }
 
     void LightAttack()
