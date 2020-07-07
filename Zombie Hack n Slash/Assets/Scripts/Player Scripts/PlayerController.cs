@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
-    public float attackRate = 2f;
+    public float attackRate = 1f;
     public Collider hitCollider;
     private float nextAttackTime = 0f;
     private bool isAttacking = false;
@@ -124,7 +124,6 @@ public class PlayerController : MonoBehaviour
         //Dash
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-
             animator.SetTrigger("Dash");
         }
 
@@ -199,8 +198,12 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
+        Debug.Log("Player is Dead!");
+
         isDead = true;
         animator.SetBool("isDead", true);
+
+        GetComponent<Collider>().enabled = false;
         this.enabled = false;
     }
 

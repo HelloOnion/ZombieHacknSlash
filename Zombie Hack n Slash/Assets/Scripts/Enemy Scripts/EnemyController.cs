@@ -112,6 +112,11 @@ public class EnemyController : MonoBehaviour
                     target = targetTransform.GetComponent<PlayerController>();
                     currentState = EnemyState.Chase;
                 }
+                else
+                {
+                    //Search for enemy
+                    currentState = EnemyState.Wander;
+                }
             }
         }
     }
