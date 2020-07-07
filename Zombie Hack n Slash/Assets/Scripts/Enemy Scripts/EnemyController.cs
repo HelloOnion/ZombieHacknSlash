@@ -13,9 +13,6 @@ public class EnemyController : MonoBehaviour
     private Animator animator;
     private int currentHealth;
 
-    //[SerializeField] 
-   // private LayerMask ignoreLayerMask;
-
     private float attackRange = 1f;
     private float rayDistance = 5f;
     private float stoppingDistance = 5f;
@@ -24,20 +21,23 @@ public class EnemyController : MonoBehaviour
     private Quaternion desiredRotation;
     private Vector3 direction;
     private EnemyState currentState;
-    private PlayerController target;
 
-    //FOV TEST
+    [HideInInspector]
+    public PlayerController target;
+
+    [Header("Visible Range")]
     public float viewRadius;
     [Range(0, 360)]
     public float viewAngle;
     public LayerMask targetMask;
     public LayerMask obstacleMask;
+    public float meshResolution;
 
     void Start()
     {
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
-        //currentState = EnemyState.Chase;
+        currentState = EnemyState.Idle;
     }
 
 
@@ -47,11 +47,14 @@ public class EnemyController : MonoBehaviour
         if (currentState == EnemyState.Idle || currentState == EnemyState.Wander)
             RNGState(changeStateRNG);
 
+        //FOV GUI
+        DrawFOV();
+
         switch (currentState)
         {
             case EnemyState.Idle:
                 {
-                    PlayIdle();
+                    IdleState();
                     //Idele Animation
                     animator.SetBool("isWandering", false);
                     animator.SetBool("isChasing", false);
@@ -60,7 +63,7 @@ public class EnemyController : MonoBehaviour
                 }
             case EnemyState.Wander:
                 {
-                    PlayWander();
+                    WanderState();
                     //walk animation
                     animator.SetBool("isWandering", true);
                     animator.SetBool("isChasing", false);
@@ -69,7 +72,7 @@ public class EnemyController : MonoBehaviour
                 }
             case EnemyState.Chase:
                 {
-                    PlayChase();
+                    ChaseState();
                     //chase animation
                     animator.SetBool("isWandering", false);
                     animator.SetBool("isChasing", true);
@@ -78,7 +81,7 @@ public class EnemyController : MonoBehaviour
                 }
             case EnemyState.Attack:
                 {
-                    PlayAttack();
+                    AttackState();
                     //attack animation
                     animator.SetBool("isWandering", false);
                     animator.SetBool("isChasing", false);
@@ -120,17 +123,71 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    //FOV Editor GUI
+    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal) {
+		if (!angleIsGlobal) {
+			angleInDegrees += transform.eulerAngles.y;
+		}
+		return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),0,Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+	}
 
-    //private void CheckPlayerInRange()
-    //{
-    //    var targetToAggro = CheckForAggro();
-    //    if (targetToAggro != null)
-    //    {
-    //        target = targetToAggro.GetComponent<PlayerController>();
-    //        currentState = EnemyState.Chase;
-    //    }
-    //}
+    private void DrawFOV()
+    {
+        int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
+        float stepAngleSize = viewAngle / stepCount;
+        List<Vector3> viewPoints = new List<Vector3>();
+        for(int i = 0; i <= stepCount; i++)
+        {
+            float angle = transform.eulerAngles.y - viewAngle/2 + stepAngleSize * i;
+            ViewCastInfo newViewCast = ViewCast(angle);   
+            viewPoints.Add(newViewCast.point);
+        }
+        int vertexCount = viewPoints.Count + 1;
+        Vector3[] vertices = new Vector3[vertexCount];
+        int[] triangles = new int[(vertexCount - 2) * 3];
 
+        vertices[0] = Vector3.zero;
+        for(int i = 0; i < vertexCount - 1; i++)
+        {
+            vertices[i+1] = viewPoints[i];
+
+            triangles[i * 3] = 0;
+            triangles[i * 3 + 1] = i + 1;
+            triangles[i * 3 + 2] = i + 2;
+        }
+    }
+
+    public struct ViewCastInfo
+    {
+        public bool hit;
+        public Vector3 point;
+        public float dst;
+        public float angle;
+        public ViewCastInfo(bool _hit, Vector3 _point, float _dst, float _angle)
+        {
+            hit = _hit;
+            point = _point;
+            dst = _dst;
+            angle = _angle;
+        }
+    }
+
+    ViewCastInfo ViewCast(float globalAngle)
+    {
+        Vector3 dir = DirFromAngle(globalAngle, true);
+        RaycastHit hit;
+
+        if(Physics.Raycast(transform.position, dir, out hit, viewRadius, obstacleMask))
+        {
+            return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
+        }
+        else
+        {
+            return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, globalAngle);
+        }
+    }
+
+//AI States
     private void RNGState(float RNG)
     {
         if (RNG <= changeStateChance)
@@ -142,13 +199,13 @@ public class EnemyController : MonoBehaviour
             currentState = EnemyState.Idle;
         }
     }
-    private void PlayIdle()
+    private void IdleState()
     {
        // CheckPlayerInRange();
         StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
-    private void PlayWander()
+    private void WanderState()
     {
         if (NeedsDestination())
         {
@@ -156,8 +213,6 @@ public class EnemyController : MonoBehaviour
         }
 
         transform.rotation = desiredRotation;
-
-        //transform.Translate(Vector3.forward * Time.deltaTime * speed);
 
         var rayColor = IsPathBlocked() ? Color.red : Color.green;
         Debug.DrawRay(transform.position, direction * rayDistance, rayColor);
@@ -169,14 +224,14 @@ public class EnemyController : MonoBehaviour
         }
 
         //CheckPlayerInRange();
-        StartCoroutine("FindTargetsWithDelay", .2f);
+        StartCoroutine("FindTargetsWithDelay", 0.2f);
     }
 
-    private void PlayChase()
+    private void ChaseState()
     {
         if(target == null)
         {
-            currentState = EnemyState.Wander;
+            currentState = EnemyState.Idle;
             return;
         }
 
@@ -189,12 +244,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void PlayAttack()
+    private void AttackState()
     {
-        //if (target != null)
-        //{
-        //    target.TakeDamage(damage);
-        //}
+
     }
 
     private bool IsPathBlocked()
@@ -217,8 +269,8 @@ public class EnemyController : MonoBehaviour
     private void GetDestination()
     {
         Vector3 testPosition = (transform.position + (transform.forward * 4f)) +
-                               new Vector3(UnityEngine.Random.Range(-4.5f, 4.5f), 0f,
-                                   UnityEngine.Random.Range(-4.5f, 4.5f));
+                            new Vector3(UnityEngine.Random.Range(-4.5f, 4.5f), 0f,
+                            UnityEngine.Random.Range(-4.5f, 4.5f));
 
         destination = new Vector3(testPosition.x, 1f, testPosition.z);
 
@@ -226,42 +278,6 @@ public class EnemyController : MonoBehaviour
         direction = new Vector3(direction.x, 0f, direction.z);
         desiredRotation = Quaternion.LookRotation(direction);
     }
-
-    Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector3.up);
-    Quaternion stepAngle = Quaternion.AngleAxis(5, Vector3.up);
-
-    //private Transform CheckForAggro()
-    //{
-    //    float aggroRadius = 5f;
-
-    //    var angle = transform.rotation * startingAngle;
-    //    var direction = angle * Vector3.forward;
-    //    var pos = transform.position;
-    //    for (var i = 0; i < 24; i++)
-    //    {
-    //        if (Physics.Raycast(pos, direction, out RaycastHit hit, rayDistance))
-    //        {
-    //            var targetCheck = hit.collider.GetComponent<PlayerController>();
-    //            if (targetCheck != null)
-    //            {
-    //                Debug.DrawRay(pos, direction * hit.distance, Color.red);
-    //                Debug.Log(hit.transform.name);
-    //                return targetCheck.transform;
-    //            }
-    //            else
-    //            {
-    //                Debug.DrawRay(pos, direction * hit.distance, Color.yellow);
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Debug.DrawRay(pos, direction * aggroRadius, Color.white);
-    //        }
-    //        direction = stepAngle * direction;
-    //    }
-
-    //    return null;
-    //}
 
     public void TakeDamage(int damage)
     {
