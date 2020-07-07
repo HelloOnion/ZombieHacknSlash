@@ -98,7 +98,8 @@ public class EnemyController : MonoBehaviour
             FindVisibleTargets();
         }
     }
-    void FindVisibleTargets()
+
+    private void FindVisibleTargets()
     {
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
@@ -106,16 +107,20 @@ public class EnemyController : MonoBehaviour
         {
             Transform targetTransform = targetsInViewRadius[i].transform;
             Vector3 dirToTarget = (targetTransform.position - transform.position).normalized;
+            
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
                 float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
-                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                //if raycast finds player without obstacle blocking
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) 
                 {
+                    //set target
                     target = targetTransform.GetComponent<PlayerController>();
+                    //change state to chase
                     currentState = EnemyState.Chase;
                 }
-                else
+                else //obstacle blocked or out of ranged
                 {
                     //Search for enemy
                     currentState = EnemyState.Wander;
@@ -146,15 +151,15 @@ public class EnemyController : MonoBehaviour
         Vector3[] vertices = new Vector3[vertexCount];
         int[] triangles = new int[(vertexCount - 2) * 3];
 
-        vertices[0] = Vector3.zero;
-        for(int i = 0; i < vertexCount - 1; i++)
-        {
-            vertices[i+1] = viewPoints[i];
+        // vertices[0] = Vector3.zero;
+        // for(int i = 0; i < vertexCount - 1; i++)
+        // {
+        //     vertices[i+1] = viewPoints[i];
 
-            triangles[i * 3] = 0;
-            triangles[i * 3 + 1] = i + 1;
-            triangles[i * 3 + 2] = i + 2;
-        }
+        //     triangles[i * 3] = 0;
+        //     triangles[i * 3 + 1] = i + 1;
+        //     triangles[i * 3 + 2] = i + 2;
+        // }
     }
 
     public struct ViewCastInfo
@@ -199,6 +204,7 @@ public class EnemyController : MonoBehaviour
             currentState = EnemyState.Idle;
         }
     }
+
     private void IdleState()
     {
        // CheckPlayerInRange();
@@ -279,7 +285,15 @@ public class EnemyController : MonoBehaviour
         desiredRotation = Quaternion.LookRotation(direction);
     }
 
-    public void TakeDamage(int damage)
+    public enum EnemyState
+    {
+        Idle,
+        Wander,
+        Chase,
+        Attack
+    }
+
+public void TakeDamage(int damage)
     {
         currentHealth -= damage;
 
@@ -301,11 +315,4 @@ public class EnemyController : MonoBehaviour
         this.enabled = false;
     }
 
-    public enum EnemyState
-    {
-        Idle,
-        Wander,
-        Chase,
-        Attack
-    }
 }

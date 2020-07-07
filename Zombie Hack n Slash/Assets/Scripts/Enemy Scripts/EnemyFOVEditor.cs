@@ -21,5 +21,9 @@ public class EnemyFOVEditor : Editor
         {
             Handles.DrawLine(fov.transform.position, fov.target.GetComponent<Transform>().position);
         }
+        // else
+        // {
+        //     Handles.DrawLine(fov.transform.position, Vector3.zero);
+        // }
     }
 }
