@@ -6,31 +6,35 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
 
+    [Header("Controller")]
     public CharacterController controller;
     public Transform cam;
 
     //Movement
     [Header("Movement")]
+    [Range(0, 1)]
     public float turnSmoothTime = 0.1f;
     public float walkSpeed = 2f;
     private float speed = 2f;
     private float turnSmoothVelocity;
 
     //Jump & Gravity
-    [Header("Gravity & Jump")]
-    Vector3 velocity;
+    [Header("Gravity")]
     public float gravity = -9.81f;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
     public float jumpHeight = 3f;
+    private Vector3 velocity;
     private bool isGrounded;
 
     //Animation
+    [Header("Animator")]
     public float attackAnimTimer = 1;
     private Animator animator;
     
     //Combat
+    [Header("Combat")]
     public int attackDamage = 40;
     public Transform attackPoint;
     public float attackRange = 0.5f;
@@ -182,13 +186,13 @@ public class PlayerController : MonoBehaviour
         //}
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (attackPoint == null) return;
+    // private void OnDrawGizmosSelected()
+    // {
+    //     if (attackPoint == null) return;
 
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    //     Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     
-    }
+    // }
 
     public void TakeDamage(float damage)
     {
