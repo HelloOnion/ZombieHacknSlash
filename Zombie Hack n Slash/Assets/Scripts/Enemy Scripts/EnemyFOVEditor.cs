@@ -17,10 +17,10 @@ public class EnemyFOVEditor : Editor
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngleB *  fov.viewRadius);
 
         Handles.color = Color.red;
-        if(fov.target != null)
-        {
-            Handles.DrawLine(fov.transform.position, fov.target.GetComponent<Transform>().position);
-        }
+         if(fov.targetInRange)
+         {
+             Handles.DrawLine(fov.transform.position, fov.GetTargetPosition());
+         }
         // else
         // {
         //     Handles.DrawLine(fov.transform.position, Vector3.zero);

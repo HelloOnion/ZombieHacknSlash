@@ -23,7 +23,8 @@ public class EnemyController : MonoBehaviour
     private EnemyState currentState;
 
     [HideInInspector]
-    public PlayerController target;
+    public bool targetInRange = false;
+    private PlayerController target;
 
     [Header("Visible Range")]
     public float viewRadius;
@@ -31,15 +32,20 @@ public class EnemyController : MonoBehaviour
     public float viewAngle;
     public LayerMask targetMask;
     public LayerMask obstacleMask;
-    public float meshResolution;
+    //[HideInInspector]
+    //public List<Transform> visibleTarget = new List<Transform>;
+
+    [Header("Visual FX")]
+    public GameObject bloodFXPrefab;
 
     void Start()
     {
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
         currentState = EnemyState.Idle;
-    }
 
+        StartCoroutine("FindTargetsWithDelay", .2f);
+    }
 
     void Update()
     {
@@ -47,49 +53,31 @@ public class EnemyController : MonoBehaviour
         if (currentState == EnemyState.Idle || currentState == EnemyState.Wander)
             RNGState(changeStateRNG);
 
-        //FOV GUI
-        DrawFOV();
-
         switch (currentState)
         {
             case EnemyState.Idle:
                 {
                     IdleState();
-                    //Idele Animation
-                    animator.SetBool("isWandering", false);
-                    animator.SetBool("isChasing", false);
-                    animator.SetBool("isAttacking", false);
                     break;
                 }
             case EnemyState.Wander:
                 {
                     WanderState();
-                    //walk animation
-                    animator.SetBool("isWandering", true);
-                    animator.SetBool("isChasing", false);
-                    animator.SetBool("isAttacking", false);
                     break;
                 }
             case EnemyState.Chase:
                 {
                     ChaseState();
-                    //chase animation
-                    animator.SetBool("isWandering", false);
-                    animator.SetBool("isChasing", true);
-                    animator.SetBool("isAttacking", false);
                     break;
                 }
             case EnemyState.Attack:
                 {
                     AttackState();
-                    //attack animation
-                    animator.SetBool("isWandering", false);
-                    animator.SetBool("isChasing", false);
-                    animator.SetBool("isAttacking", true);
                     break;
                 }
         }
     }
+    
     IEnumerator FindTargetsWithDelay(float delay)
     {
         while (true)
@@ -101,6 +89,7 @@ public class EnemyController : MonoBehaviour
 
     private void FindVisibleTargets()
     {
+        target = null;
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++)
@@ -115,82 +104,32 @@ public class EnemyController : MonoBehaviour
                 //if raycast finds player without obstacle blocking
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) 
                 {
+                    //Debug.Log("chasing");
                     //set target
                     target = targetTransform.GetComponent<PlayerController>();
                     //change state to chase
                     currentState = EnemyState.Chase;
+                    targetInRange = true;
                 }
-                else //obstacle blocked or out of ranged
+                else //obstacle blocked (still chasing after running out of range)
                 {
+                   // Debug.Log("target lost");
                     //Search for enemy
+                    //target = null;
                     currentState = EnemyState.Wander;
+                    targetInRange = false;
                 }
             }
         }
     }
     //FOV Editor GUI
-    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal) {
+    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
+    {
 		if (!angleIsGlobal) {
 			angleInDegrees += transform.eulerAngles.y;
 		}
 		return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),0,Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
 	}
-
-    private void DrawFOV()
-    {
-        int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
-        float stepAngleSize = viewAngle / stepCount;
-        List<Vector3> viewPoints = new List<Vector3>();
-        for(int i = 0; i <= stepCount; i++)
-        {
-            float angle = transform.eulerAngles.y - viewAngle/2 + stepAngleSize * i;
-            ViewCastInfo newViewCast = ViewCast(angle);   
-            viewPoints.Add(newViewCast.point);
-        }
-        int vertexCount = viewPoints.Count + 1;
-        Vector3[] vertices = new Vector3[vertexCount];
-        int[] triangles = new int[(vertexCount - 2) * 3];
-
-        // vertices[0] = Vector3.zero;
-        // for(int i = 0; i < vertexCount - 1; i++)
-        // {
-        //     vertices[i+1] = viewPoints[i];
-
-        //     triangles[i * 3] = 0;
-        //     triangles[i * 3 + 1] = i + 1;
-        //     triangles[i * 3 + 2] = i + 2;
-        // }
-    }
-
-    public struct ViewCastInfo
-    {
-        public bool hit;
-        public Vector3 point;
-        public float dst;
-        public float angle;
-        public ViewCastInfo(bool _hit, Vector3 _point, float _dst, float _angle)
-        {
-            hit = _hit;
-            point = _point;
-            dst = _dst;
-            angle = _angle;
-        }
-    }
-
-    ViewCastInfo ViewCast(float globalAngle)
-    {
-        Vector3 dir = DirFromAngle(globalAngle, true);
-        RaycastHit hit;
-
-        if(Physics.Raycast(transform.position, dir, out hit, viewRadius, obstacleMask))
-        {
-            return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
-        }
-        else
-        {
-            return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, globalAngle);
-        }
-    }
 
 //AI States
     private void RNGState(float RNG)
@@ -207,12 +146,21 @@ public class EnemyController : MonoBehaviour
 
     private void IdleState()
     {
+        //Idele Animation
+        animator.SetBool("isWandering", false);
+        animator.SetBool("isChasing", false);
+        animator.SetBool("isAttacking", false);
        // CheckPlayerInRange();
-        StartCoroutine("FindTargetsWithDelay", .2f);
+        // StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
     private void WanderState()
     {
+        //walk animation
+        animator.SetBool("isWandering", true);
+        animator.SetBool("isChasing", false);
+        animator.SetBool("isAttacking", false);
+        
         if (NeedsDestination())
         {
             GetDestination();
@@ -230,11 +178,16 @@ public class EnemyController : MonoBehaviour
         }
 
         //CheckPlayerInRange();
-        StartCoroutine("FindTargetsWithDelay", 0.2f);
+        //StartCoroutine("FindTargetsWithDelay", 0.2f);
     }
 
     private void ChaseState()
     {
+        //chase animation
+        animator.SetBool("isWandering", false);
+        animator.SetBool("isChasing", true);
+        animator.SetBool("isAttacking", false);
+
         if(target == null)
         {
             currentState = EnemyState.Idle;
@@ -252,7 +205,10 @@ public class EnemyController : MonoBehaviour
 
     private void AttackState()
     {
-
+        //attack animation
+        animator.SetBool("isWandering", false);
+        animator.SetBool("isChasing", false);
+        animator.SetBool("isAttacking", true);
     }
 
     private bool IsPathBlocked()
@@ -293,10 +249,21 @@ public class EnemyController : MonoBehaviour
         Attack
     }
 
+    public Vector3 GetTargetPosition()
+    {
+        if(target != null)
+            return target.GetComponent<Transform>().position;
+
+        return Vector3.zero;
+    }
+
 public void TakeDamage(int damage)
     {
         currentHealth -= damage;
 
+        Vector3 bloodPos = new Vector3(transform.position.x, 1.3f, transform.position.z);
+        //Vector3 bloodRotation = new Vector3(transform.rotation.x - transform.fo, transform.rotation.y, transform.rotation.z);
+        Instantiate(bloodFXPrefab, bloodPos, Quaternion.Euler(0,transform.rotation.y - 180,0), transform);
         //play hurt animation
         animator.SetTrigger("Hurt");
 
