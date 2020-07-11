@@ -257,7 +257,7 @@ public class EnemyController : MonoBehaviour
         return Vector3.zero;
     }
 
-public void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
 
