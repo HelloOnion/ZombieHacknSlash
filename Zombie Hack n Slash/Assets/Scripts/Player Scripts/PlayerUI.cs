@@ -6,13 +6,9 @@ using UnityEngine.UI;
 public class PlayerUI : MonoBehaviour
 {
     public Image hpBar;
-
-    PlayerController player;
-
-    void Start()
-    {
-        player = GetComponent<PlayerController>();
-    }
+    
+    [SerializeField]
+    private PlayerController player;
 
     void Update()
     {

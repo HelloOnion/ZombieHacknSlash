@@ -1,196 +1,575 @@
 fileFormatVersion: 2
 guid: 73879c53f9374e7418144344b49dcaa7
-timeCreated: 1503592831
-licenseType: Store
 ModelImporter:
-  serializedVersion: 21
-  fileIDToRecycleName:
-    100000: Bip001 Footsteps
-    100002: Bip001 HeadNub
-    100004: Bip001 L Finger0Nub
-    100006: Bip001 L Finger1Nub
-    100008: Bip001 L Finger2Nub
-    100010: Bip001 L Finger3Nub
-    100012: Bip001 L Finger4Nub
-    100014: Bip001 L Toe0Nub
-    100016: Bip001 R Finger0Nub
-    100018: Bip001 R Finger1Nub
-    100020: Bip001 R Finger2Nub
-    100022: Bip001 R Finger3Nub
-    100024: Bip001 R Finger4Nub
-    100026: Bip001 R Toe0Nub
-    100028: Chest
-    100030: Eye_L
-    100032: Eye_R
-    100034: Eyelash
-    100036: Head
-    100038: Hips
-    100040: //RootNode
-    100042: LeftArm
-    100044: LeftArm_Twist
-    100046: LeftFoot
-    100048: LeftForeArm
-    100050: LeftForeArm_Twist
-    100052: LeftHand
-    100054: LeftIndex1
-    100056: LeftIndex2
-    100058: LeftIndex3
-    100060: LeftLeg
-    100062: LeftLeg_Twist
-    100064: LeftMiddle1
-    100066: LeftMiddle2
-    100068: LeftMiddle3
-    100070: LeftPink1
-    100072: LeftPink2
-    100074: LeftPink3
-    100076: LeftRing1
-    100078: LeftRing2
-    100080: LeftRing3
-    100082: LeftShoulder
-    100084: LeftThumb1
-    100086: LeftThumb2
-    100088: LeftThumb3
-    100090: LeftToe
-    100092: LeftUpLeg
-    100094: LeftUpLeg_Twist
-    100096: Neck
-    100098: Ninja_M
-    100100: Pelvis
-    100102: RightArm
-    100104: RightArm_Twist
-    100106: RightFoot
-    100108: RightForeArm
-    100110: RightForeArm_Twist
-    100112: RightHand
-    100114: RightIndex1
-    100116: RightIndex2
-    100118: RightIndex3
-    100120: RightLeg
-    100122: RightLeg_Twist
-    100124: RightMiddle1
-    100126: RightMiddle2
-    100128: RightMiddle3
-    100130: RightPinky1
-    100132: RightPinky2
-    100134: RightPinky3
-    100136: RightRing1
-    100138: RightRing2
-    100140: RightRing3
-    100142: RightShoulder
-    100144: RightThumb1
-    100146: RightThumb2
-    100148: RightThumb3
-    100150: RightToe
-    100152: RightUpLeg
-    100154: RightUpLeg_Twist
-    100156: Spine
-    100158: Sword_Back
-    100160: Sword_Hand
-    100162: Sword_Hand_Bone
-    100164: Wood
-    400000: Bip001 Footsteps
-    400002: Bip001 HeadNub
-    400004: Bip001 L Finger0Nub
-    400006: Bip001 L Finger1Nub
-    400008: Bip001 L Finger2Nub
-    400010: Bip001 L Finger3Nub
-    400012: Bip001 L Finger4Nub
-    400014: Bip001 L Toe0Nub
-    400016: Bip001 R Finger0Nub
-    400018: Bip001 R Finger1Nub
-    400020: Bip001 R Finger2Nub
-    400022: Bip001 R Finger3Nub
-    400024: Bip001 R Finger4Nub
-    400026: Bip001 R Toe0Nub
-    400028: Chest
-    400030: Eye_L
-    400032: Eye_R
-    400034: Eyelash
-    400036: Head
-    400038: Hips
-    400040: //RootNode
-    400042: LeftArm
-    400044: LeftArm_Twist
-    400046: LeftFoot
-    400048: LeftForeArm
-    400050: LeftForeArm_Twist
-    400052: LeftHand
-    400054: LeftIndex1
-    400056: LeftIndex2
-    400058: LeftIndex3
-    400060: LeftLeg
-    400062: LeftLeg_Twist
-    400064: LeftMiddle1
-    400066: LeftMiddle2
-    400068: LeftMiddle3
-    400070: LeftPink1
-    400072: LeftPink2
-    400074: LeftPink3
-    400076: LeftRing1
-    400078: LeftRing2
-    400080: LeftRing3
-    400082: LeftShoulder
-    400084: LeftThumb1
-    400086: LeftThumb2
-    400088: LeftThumb3
-    400090: LeftToe
-    400092: LeftUpLeg
-    400094: LeftUpLeg_Twist
-    400096: Neck
-    400098: Ninja_M
-    400100: Pelvis
-    400102: RightArm
-    400104: RightArm_Twist
-    400106: RightFoot
-    400108: RightForeArm
-    400110: RightForeArm_Twist
-    400112: RightHand
-    400114: RightIndex1
-    400116: RightIndex2
-    400118: RightIndex3
-    400120: RightLeg
-    400122: RightLeg_Twist
-    400124: RightMiddle1
-    400126: RightMiddle2
-    400128: RightMiddle3
-    400130: RightPinky1
-    400132: RightPinky2
-    400134: RightPinky3
-    400136: RightRing1
-    400138: RightRing2
-    400140: RightRing3
-    400142: RightShoulder
-    400144: RightThumb1
-    400146: RightThumb2
-    400148: RightThumb3
-    400150: RightToe
-    400152: RightUpLeg
-    400154: RightUpLeg_Twist
-    400156: Spine
-    400158: Sword_Back
-    400160: Sword_Hand
-    400162: Sword_Hand_Bone
-    400164: Wood
-    4300000: Ninja_M
-    4300002: Sword_Hand
-    4300004: Eyelash
-    4300006: Sword_Back
-    4300008: Wood
-    4300010: Eye_L
-    4300012: Eye_R
-    7400000: Jump_Forward
-    9500000: //RootNode
-    13700000: Eye_L
-    13700002: Eye_R
-    13700004: Eyelash
-    13700006: Ninja_M
-    13700008: Sword_Back
-    13700010: Sword_Hand
-    13700012: Wood
+  serializedVersion: 19301
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Bip001 Footsteps
+  - first:
+      1: 100002
+    second: Bip001 HeadNub
+  - first:
+      1: 100004
+    second: Bip001 L Finger0Nub
+  - first:
+      1: 100006
+    second: Bip001 L Finger1Nub
+  - first:
+      1: 100008
+    second: Bip001 L Finger2Nub
+  - first:
+      1: 100010
+    second: Bip001 L Finger3Nub
+  - first:
+      1: 100012
+    second: Bip001 L Finger4Nub
+  - first:
+      1: 100014
+    second: Bip001 L Toe0Nub
+  - first:
+      1: 100016
+    second: Bip001 R Finger0Nub
+  - first:
+      1: 100018
+    second: Bip001 R Finger1Nub
+  - first:
+      1: 100020
+    second: Bip001 R Finger2Nub
+  - first:
+      1: 100022
+    second: Bip001 R Finger3Nub
+  - first:
+      1: 100024
+    second: Bip001 R Finger4Nub
+  - first:
+      1: 100026
+    second: Bip001 R Toe0Nub
+  - first:
+      1: 100028
+    second: Chest
+  - first:
+      1: 100030
+    second: Eye_L
+  - first:
+      1: 100032
+    second: Eye_R
+  - first:
+      1: 100034
+    second: Eyelash
+  - first:
+      1: 100036
+    second: Head
+  - first:
+      1: 100038
+    second: Hips
+  - first:
+      1: 100040
+    second: //RootNode
+  - first:
+      1: 100042
+    second: LeftArm
+  - first:
+      1: 100044
+    second: LeftArm_Twist
+  - first:
+      1: 100046
+    second: LeftFoot
+  - first:
+      1: 100048
+    second: LeftForeArm
+  - first:
+      1: 100050
+    second: LeftForeArm_Twist
+  - first:
+      1: 100052
+    second: LeftHand
+  - first:
+      1: 100054
+    second: LeftIndex1
+  - first:
+      1: 100056
+    second: LeftIndex2
+  - first:
+      1: 100058
+    second: LeftIndex3
+  - first:
+      1: 100060
+    second: LeftLeg
+  - first:
+      1: 100062
+    second: LeftLeg_Twist
+  - first:
+      1: 100064
+    second: LeftMiddle1
+  - first:
+      1: 100066
+    second: LeftMiddle2
+  - first:
+      1: 100068
+    second: LeftMiddle3
+  - first:
+      1: 100070
+    second: LeftPink1
+  - first:
+      1: 100072
+    second: LeftPink2
+  - first:
+      1: 100074
+    second: LeftPink3
+  - first:
+      1: 100076
+    second: LeftRing1
+  - first:
+      1: 100078
+    second: LeftRing2
+  - first:
+      1: 100080
+    second: LeftRing3
+  - first:
+      1: 100082
+    second: LeftShoulder
+  - first:
+      1: 100084
+    second: LeftThumb1
+  - first:
+      1: 100086
+    second: LeftThumb2
+  - first:
+      1: 100088
+    second: LeftThumb3
+  - first:
+      1: 100090
+    second: LeftToe
+  - first:
+      1: 100092
+    second: LeftUpLeg
+  - first:
+      1: 100094
+    second: LeftUpLeg_Twist
+  - first:
+      1: 100096
+    second: Neck
+  - first:
+      1: 100098
+    second: Ninja_M
+  - first:
+      1: 100100
+    second: Pelvis
+  - first:
+      1: 100102
+    second: RightArm
+  - first:
+      1: 100104
+    second: RightArm_Twist
+  - first:
+      1: 100106
+    second: RightFoot
+  - first:
+      1: 100108
+    second: RightForeArm
+  - first:
+      1: 100110
+    second: RightForeArm_Twist
+  - first:
+      1: 100112
+    second: RightHand
+  - first:
+      1: 100114
+    second: RightIndex1
+  - first:
+      1: 100116
+    second: RightIndex2
+  - first:
+      1: 100118
+    second: RightIndex3
+  - first:
+      1: 100120
+    second: RightLeg
+  - first:
+      1: 100122
+    second: RightLeg_Twist
+  - first:
+      1: 100124
+    second: RightMiddle1
+  - first:
+      1: 100126
+    second: RightMiddle2
+  - first:
+      1: 100128
+    second: RightMiddle3
+  - first:
+      1: 100130
+    second: RightPinky1
+  - first:
+      1: 100132
+    second: RightPinky2
+  - first:
+      1: 100134
+    second: RightPinky3
+  - first:
+      1: 100136
+    second: RightRing1
+  - first:
+      1: 100138
+    second: RightRing2
+  - first:
+      1: 100140
+    second: RightRing3
+  - first:
+      1: 100142
+    second: RightShoulder
+  - first:
+      1: 100144
+    second: RightThumb1
+  - first:
+      1: 100146
+    second: RightThumb2
+  - first:
+      1: 100148
+    second: RightThumb3
+  - first:
+      1: 100150
+    second: RightToe
+  - first:
+      1: 100152
+    second: RightUpLeg
+  - first:
+      1: 100154
+    second: RightUpLeg_Twist
+  - first:
+      1: 100156
+    second: Spine
+  - first:
+      1: 100158
+    second: Sword_Back
+  - first:
+      1: 100160
+    second: Sword_Hand
+  - first:
+      1: 100162
+    second: Sword_Hand_Bone
+  - first:
+      1: 100164
+    second: Wood
+  - first:
+      4: 400000
+    second: Bip001 Footsteps
+  - first:
+      4: 400002
+    second: Bip001 HeadNub
+  - first:
+      4: 400004
+    second: Bip001 L Finger0Nub
+  - first:
+      4: 400006
+    second: Bip001 L Finger1Nub
+  - first:
+      4: 400008
+    second: Bip001 L Finger2Nub
+  - first:
+      4: 400010
+    second: Bip001 L Finger3Nub
+  - first:
+      4: 400012
+    second: Bip001 L Finger4Nub
+  - first:
+      4: 400014
+    second: Bip001 L Toe0Nub
+  - first:
+      4: 400016
+    second: Bip001 R Finger0Nub
+  - first:
+      4: 400018
+    second: Bip001 R Finger1Nub
+  - first:
+      4: 400020
+    second: Bip001 R Finger2Nub
+  - first:
+      4: 400022
+    second: Bip001 R Finger3Nub
+  - first:
+      4: 400024
+    second: Bip001 R Finger4Nub
+  - first:
+      4: 400026
+    second: Bip001 R Toe0Nub
+  - first:
+      4: 400028
+    second: Chest
+  - first:
+      4: 400030
+    second: Eye_L
+  - first:
+      4: 400032
+    second: Eye_R
+  - first:
+      4: 400034
+    second: Eyelash
+  - first:
+      4: 400036
+    second: Head
+  - first:
+      4: 400038
+    second: Hips
+  - first:
+      4: 400040
+    second: //RootNode
+  - first:
+      4: 400042
+    second: LeftArm
+  - first:
+      4: 400044
+    second: LeftArm_Twist
+  - first:
+      4: 400046
+    second: LeftFoot
+  - first:
+      4: 400048
+    second: LeftForeArm
+  - first:
+      4: 400050
+    second: LeftForeArm_Twist
+  - first:
+      4: 400052
+    second: LeftHand
+  - first:
+      4: 400054
+    second: LeftIndex1
+  - first:
+      4: 400056
+    second: LeftIndex2
+  - first:
+      4: 400058
+    second: LeftIndex3
+  - first:
+      4: 400060
+    second: LeftLeg
+  - first:
+      4: 400062
+    second: LeftLeg_Twist
+  - first:
+      4: 400064
+    second: LeftMiddle1
+  - first:
+      4: 400066
+    second: LeftMiddle2
+  - first:
+      4: 400068
+    second: LeftMiddle3
+  - first:
+      4: 400070
+    second: LeftPink1
+  - first:
+      4: 400072
+    second: LeftPink2
+  - first:
+      4: 400074
+    second: LeftPink3
+  - first:
+      4: 400076
+    second: LeftRing1
+  - first:
+      4: 400078
+    second: LeftRing2
+  - first:
+      4: 400080
+    second: LeftRing3
+  - first:
+      4: 400082
+    second: LeftShoulder
+  - first:
+      4: 400084
+    second: LeftThumb1
+  - first:
+      4: 400086
+    second: LeftThumb2
+  - first:
+      4: 400088
+    second: LeftThumb3
+  - first:
+      4: 400090
+    second: LeftToe
+  - first:
+      4: 400092
+    second: LeftUpLeg
+  - first:
+      4: 400094
+    second: LeftUpLeg_Twist
+  - first:
+      4: 400096
+    second: Neck
+  - first:
+      4: 400098
+    second: Ninja_M
+  - first:
+      4: 400100
+    second: Pelvis
+  - first:
+      4: 400102
+    second: RightArm
+  - first:
+      4: 400104
+    second: RightArm_Twist
+  - first:
+      4: 400106
+    second: RightFoot
+  - first:
+      4: 400108
+    second: RightForeArm
+  - first:
+      4: 400110
+    second: RightForeArm_Twist
+  - first:
+      4: 400112
+    second: RightHand
+  - first:
+      4: 400114
+    second: RightIndex1
+  - first:
+      4: 400116
+    second: RightIndex2
+  - first:
+      4: 400118
+    second: RightIndex3
+  - first:
+      4: 400120
+    second: RightLeg
+  - first:
+      4: 400122
+    second: RightLeg_Twist
+  - first:
+      4: 400124
+    second: RightMiddle1
+  - first:
+      4: 400126
+    second: RightMiddle2
+  - first:
+      4: 400128
+    second: RightMiddle3
+  - first:
+      4: 400130
+    second: RightPinky1
+  - first:
+      4: 400132
+    second: RightPinky2
+  - first:
+      4: 400134
+    second: RightPinky3
+  - first:
+      4: 400136
+    second: RightRing1
+  - first:
+      4: 400138
+    second: RightRing2
+  - first:
+      4: 400140
+    second: RightRing3
+  - first:
+      4: 400142
+    second: RightShoulder
+  - first:
+      4: 400144
+    second: RightThumb1
+  - first:
+      4: 400146
+    second: RightThumb2
+  - first:
+      4: 400148
+    second: RightThumb3
+  - first:
+      4: 400150
+    second: RightToe
+  - first:
+      4: 400152
+    second: RightUpLeg
+  - first:
+      4: 400154
+    second: RightUpLeg_Twist
+  - first:
+      4: 400156
+    second: Spine
+  - first:
+      4: 400158
+    second: Sword_Back
+  - first:
+      4: 400160
+    second: Sword_Hand
+  - first:
+      4: 400162
+    second: Sword_Hand_Bone
+  - first:
+      4: 400164
+    second: Wood
+  - first:
+      43: 4300000
+    second: Ninja_M
+  - first:
+      43: 4300002
+    second: Sword_Hand
+  - first:
+      43: 4300004
+    second: Eyelash
+  - first:
+      43: 4300006
+    second: Sword_Back
+  - first:
+      43: 4300008
+    second: Wood
+  - first:
+      43: 4300010
+    second: Eye_L
+  - first:
+      43: 4300012
+    second: Eye_R
+  - first:
+      74: 7400000
+    second: Jump_Forward
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: Eye_L
+  - first:
+      137: 13700002
+    second: Eye_R
+  - first:
+      137: 13700004
+    second: Eyelash
+  - first:
+      137: 13700006
+    second: Ninja_M
+  - first:
+      137: 13700008
+    second: Sword_Back
+  - first:
+      137: 13700010
+    second: Sword_Hand
+  - first:
+      137: 13700012
+    second: Wood
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Eyelash
+    second: {fileID: 2100000, guid: d269c2c65a3517e438ef4ca81f1fb94c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Nin_01
+    second: {fileID: 2100000, guid: a902dd6fd4a79de48965e13604e9c4c7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Nin_02
+    second: {fileID: 2100000, guid: 5ff272cf2c2fa8446800bbc018ccfa10, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -201,11 +580,13 @@ ModelImporter:
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'Chest' has translation animation that will
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Chest' has translation animation that will
       be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -217,6 +598,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Jump_Forward
       takeName: Take 001
+      internalID: 0
       firstFrame: 0
       lastFrame: 51
       wrapMode: 0
@@ -248,16 +630,24 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -268,10 +658,13 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human:
     - boneName: Pelvis
       humanName: Hips
@@ -1105,15 +1498,17 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: cc7aca7dd7fa6d641a778e40737a5906,
     type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
+  avatarSetup: 2
   additionalBone: 0
   userData: 
   assetBundleName: 

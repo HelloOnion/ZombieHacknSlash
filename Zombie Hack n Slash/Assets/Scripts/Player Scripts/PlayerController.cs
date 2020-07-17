@@ -6,43 +6,45 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
 
+    [Header("Controller")]
     public CharacterController controller;
     public Transform cam;
 
     //Movement
     [Header("Movement")]
+    [Range(0, 1)]
     public float turnSmoothTime = 0.1f;
     public float walkSpeed = 2f;
     private float speed = 2f;
     private float turnSmoothVelocity;
 
     //Jump & Gravity
-    [Header("Gravity & Jump")]
-    Vector3 velocity;
+    [Header("Gravity")]
     public float gravity = -9.81f;
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
     public float jumpHeight = 3f;
+    private Vector3 velocity;
     private bool isGrounded;
 
     //Animation
-    public Animator animator;
+    [Header("Animator")]
     public float attackAnimTimer = 1;
+    private Animator animator;
     
     //Combat
+    [Header("Combat")]
     public int attackDamage = 40;
-    public Transform attackPoint;
-    public float attackRange = 0.5f;
-    public LayerMask enemyLayers;
     public float attackRate = 2f;
+    public Collider hitCollider;
     private float nextAttackTime = 0f;
     private bool isAttacking = false;
 
+
     //Misc
-    bool isDead = false;
+    private bool isDead = false;
     private float maxHealth = 100f;
-    [SerializeField]
     private float currentHealth;
 
     void Start()
@@ -51,6 +53,7 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         speed = walkSpeed;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -61,10 +64,8 @@ public class PlayerController : MonoBehaviour
             {
                 Movement();
             }
-            else
-            {
-                StartCoroutine(resetMovement());
-            }
+
+            CheckAttacking();
 
             GravityCheck();
 
@@ -82,12 +83,12 @@ public class PlayerController : MonoBehaviour
                     nextAttackTime = Time.time + 1f / attackRate;
                 }
             }
-
+            
             //damage debug test
             if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
         }
     }
-
+    
     private void Movement()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            //controller.Move(moveDir.normalized * speed * Time.deltaTime);
         }
 
 
@@ -120,6 +121,13 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Jump");
         }
 
+        //Dash
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
+            animator.SetTrigger("Dash");
+        }
+
         //Animation
         animator.SetFloat("Magnitude", direction.magnitude);
     }
@@ -132,10 +140,16 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isGrounded", isGrounded);
     }
 
-    IEnumerator resetMovement()
+    private void CheckAttacking()
     {
-        yield return new WaitForSeconds(attackAnimTimer);
-        isAttacking = false;
+        if(animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        {
+            isAttacking = true;
+        }
+        else
+        {
+            isAttacking = false;
+        }
     }
 
     void LightAttack()
@@ -143,39 +157,40 @@ public class PlayerController : MonoBehaviour
         //light attack Animation
         animator.SetTrigger("LightAttack");
 
-        EnemyHitCheck();
+        CheckHit();
     }
 
     void HeavyAttack()
     {
         //heavy attack Animation
         animator.SetTrigger("HeavyAttack");
-
-        EnemyHitCheck();
+        
+        CheckHit();
     }
 
-    void EnemyHitCheck()
+    void CheckHit()
     {
+        //hitCollider.enabled = true;
         //Detect enemies in range of attack
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+        //Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
         //Damage Enemy
-        foreach (Collider enemy in hitEnemies)
-        {
-            Debug.Log("Enemy Hit!" + enemy.name);
-            enemy.GetComponent<EnemyController>().TakeDamage(attackDamage);
-        }
+        //foreach (Collider enemy in hitEnemies)
+        //{
+        //    Debug.Log("Enemy Hit!" + enemy.name);
+        //    enemy.GetComponent<EnemyController>().TakeDamage(attackDamage);
+        //}
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (attackPoint == null) return;
+    // private void OnDrawGizmosSelected()
+    // {
+    //     if (attackPoint == null) return;
 
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    //     Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     
-    }
+    // }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
