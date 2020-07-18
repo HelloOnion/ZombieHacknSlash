@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
+    public Text healthText;
     public Image hpBar;
     
     [SerializeField]
@@ -13,5 +14,6 @@ public class PlayerUI : MonoBehaviour
     void Update()
     {
         hpBar.fillAmount = player.GetCurrentHealth() / 100;
+        healthText.text = player.GetCurrentHealth() + "/100";
     }
 }

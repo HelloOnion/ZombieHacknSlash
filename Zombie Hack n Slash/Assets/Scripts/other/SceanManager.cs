@@ -22,7 +22,7 @@ public class SceanManager : MonoBehaviour
 
     IEnumerator LoadScene(int sceneIndex)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 
         menuBox.SetActive(false);
         loadingScreen.SetActive(true);

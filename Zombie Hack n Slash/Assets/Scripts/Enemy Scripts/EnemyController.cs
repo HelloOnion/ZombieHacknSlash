@@ -9,7 +9,11 @@ public class EnemyController : MonoBehaviour
     public int maxHealth = 100;
     public float speed = 1f;
     public float changeStateChance = 50f;
-    public float attackDamage = 10f;
+
+    public int minAttackDmg = 5;
+    public int maxAttackDmg = 10;
+    public int attackDamage;
+
     private Animator animator;
     private int currentHealth;
 
@@ -205,6 +209,7 @@ public class EnemyController : MonoBehaviour
 
     private void AttackState()
     {
+        attackDamage = Random.Range(minAttackDmg, maxAttackDmg);
         //attack animation
         animator.SetBool("isWandering", false);
         animator.SetBool("isChasing", false);
@@ -273,6 +278,7 @@ public class EnemyController : MonoBehaviour
     private void Die()
     {
         Debug.Log("Enemy Dead!");
+        FindObjectOfType<ScoreController>().AddScore(100);
 
         isDead = true;
         //die animation

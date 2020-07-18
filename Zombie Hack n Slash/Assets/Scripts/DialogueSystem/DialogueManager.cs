@@ -12,6 +12,8 @@ public class DialogueManager : MonoBehaviour
     [Header("Add Dialogue")]
     public Queue<string> sentences;
 
+    private bool isGameClear;
+
     void Start()
     {
         sentences = new Queue<string>();
@@ -20,6 +22,8 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
+        isGameClear = dialogue.gameClear;
+
         //TODO:pause game and Animate dialogue box in/ show cursor
         LeanTween.scale(dialogueImage.gameObject, new Vector3(1,1,1), 0.4f).setIgnoreTimeScale(true);
         Cursor.visible = true;
@@ -63,6 +67,11 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
+        if(isGameClear)
+        {
+            
+            //GameClear Scene
+        }
         //TODO:Animate dialogue box out and un pause game/ hide cursor
         LeanTween.scale(dialogueImage.gameObject, new Vector3(0,0,0), 0.4f).setIgnoreTimeScale(true);
         Cursor.visible = false;
