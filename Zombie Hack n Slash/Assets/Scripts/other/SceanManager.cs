@@ -13,6 +13,7 @@ public class SceanManager : MonoBehaviour
     public void LoadLevel(int sceneIndex)
     {
         StartCoroutine(LoadScene(sceneIndex));
+        Time.timeScale = 1f;
     }
 
     public void QuitGame()
@@ -35,5 +36,6 @@ public class SceanManager : MonoBehaviour
 
             yield return null;
         }
+        
     }
 }

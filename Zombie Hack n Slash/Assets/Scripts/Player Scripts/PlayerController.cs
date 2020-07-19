@@ -186,7 +186,10 @@ public class PlayerController : MonoBehaviour
     {
         isDead = true;
         animator.SetBool("isDead", true);
-        this.enabled = false;
+        FindObjectOfType<GameManager>().GameOver();
+        GetComponent<Collider>().enabled = false;
+
+       // this.enabled = false;
     }
 
     public float GetCurrentHealth() { return currentHealth; }

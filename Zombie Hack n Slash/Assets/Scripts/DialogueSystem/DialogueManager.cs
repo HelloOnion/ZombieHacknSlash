@@ -69,14 +69,18 @@ public class DialogueManager : MonoBehaviour
     {
         if(isGameClear)
         {
-            
             //GameClear Scene
+            FindObjectOfType<GameManager>().GameClear();
         }
-        //TODO:Animate dialogue box out and un pause game/ hide cursor
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1;
+        }
+
+        //Animate dialogue box out and un pause game
         LeanTween.scale(dialogueImage.gameObject, new Vector3(0,0,0), 0.4f).setIgnoreTimeScale(true);
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Time.timeScale = 1;
         Debug.Log("Dialogue Ended");
     }
 }

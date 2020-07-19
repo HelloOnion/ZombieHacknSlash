@@ -7,8 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager gameManagerInstance;
 
+    [Header("UI")]
     public Text clearText;
-    
+    public Text gameOverText;
 
     private void Awake() 
     {
@@ -22,17 +23,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        
-    }
-
     public void GameClear()
     {
         Debug.Log("Game Cleared!");
+        clearText.gameObject.SetActive(true);
+        FindObjectOfType<ScoreController>().ShowResult();
+    }
 
-        Time.timeScale = 0;
-
+    public void GameOver()
+    {
+        Debug.Log("Game Over!");
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        gameOverText.gameObject.SetActive(true);
+        FindObjectOfType<ScoreController>().ShowResult();
     }
 
 }

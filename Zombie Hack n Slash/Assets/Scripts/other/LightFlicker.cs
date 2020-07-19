@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LightFlicker : MonoBehaviour
 {
-    public Light light;
+    public Light lightObj;
     [Tooltip("Turn　Lights On/Off")]
     [Header("On/Off")]
     public bool lightOn = true;
@@ -24,14 +24,18 @@ public class LightFlicker : MonoBehaviour
     {
         smoothQueue = new Queue<float>(smoothing);
 
-        if (light == null){ light = GetComponent<Light>(); }
+        if (lightObj == null){ lightObj = GetComponent<Light>(); }
 
-        if(lightOn == false){ light.gameObject.SetActive(false); }
+        if(lightOn == false)
+        {
+            lightObj.gameObject.SetActive(false);
+            this.enabled = false;
+        }
     }
 
     void Update()
     {
-        if(light == null) return;
+        if(lightObj == null) return;
 
         if(lightOn && flicker)
         {
@@ -43,7 +47,7 @@ public class LightFlicker : MonoBehaviour
             smoothQueue.Enqueue(newVal);
             lastSum += newVal;
 
-            light.intensity = lastSum / (float)smoothQueue.Count;
+            lightObj.intensity = lastSum / (float)smoothQueue.Count;
         }
         
     }

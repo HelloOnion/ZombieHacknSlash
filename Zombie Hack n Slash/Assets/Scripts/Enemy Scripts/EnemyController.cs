@@ -278,7 +278,10 @@ public class EnemyController : MonoBehaviour
     private void Die()
     {
         Debug.Log("Enemy Dead!");
+
+        //add score
         FindObjectOfType<ScoreController>().AddScore(100);
+        FindObjectOfType<ScoreController>().AddKillCount(1);
 
         isDead = true;
         //die animation
