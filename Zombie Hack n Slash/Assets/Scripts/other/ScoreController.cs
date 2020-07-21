@@ -55,7 +55,8 @@ public class ScoreController : MonoBehaviour
             scoreResultText.text = "Score: " + i;
             yield return null;
         }
-        StartCoroutine(KillCount());
+        if(Input.GetMouseButtonDown(0)) StartCoroutine(KillCount());
+        else StartCoroutine(KillCount());
     }
 
     IEnumerator KillCount()
