@@ -40,6 +40,8 @@ public class EnemyController : MonoBehaviour
     [Header("Visual FX")]
     public GameObject bloodFXPrefab;
 
+    public GameObject miniMapUI;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -276,7 +278,7 @@ public class EnemyController : MonoBehaviour
         isDead = true;
         //die animation
         animator.SetBool("isDead", true);
-
+        miniMapUI.SetActive(false);
         GetComponent<Collider>().enabled = false;
         this.enabled = false;
     }
