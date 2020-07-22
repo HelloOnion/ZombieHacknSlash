@@ -38,6 +38,10 @@ public class PlayerController : MonoBehaviour
     public int attackDamage = 40;
     public float attackRate = 2f;
     public Collider hitCollider;
+    private int minLightDmg = 5;
+    private int maxLightDmg = 20;
+    private int minHeavyDmg = 20;
+    private int maxHeavyDmg = 50;
     private float nextAttackTime = 0f;
     private bool isAttacking = false;
 
@@ -154,54 +158,38 @@ public class PlayerController : MonoBehaviour
 
     void LightAttack()
     {
+        attackDamage = Random.Range(minLightDmg, maxLightDmg);
         //light attack Animation
         animator.SetTrigger("LightAttack");
-
-        CheckHit();
     }
 
     void HeavyAttack()
     {
+        attackDamage = Random.Range(minHeavyDmg, maxHeavyDmg);
         //heavy attack Animation
         animator.SetTrigger("HeavyAttack");
-        
-        CheckHit();
     }
 
-    void CheckHit()
-    {
-        //hitCollider.enabled = true;
-        //Detect enemies in range of attack
-        //Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
-
-        //Damage Enemy
-        //foreach (Collider enemy in hitEnemies)
-        //{
-        //    Debug.Log("Enemy Hit!" + enemy.name);
-        //    enemy.GetComponent<EnemyController>().TakeDamage(attackDamage);
-        //}
-    }
-
-    // private void OnDrawGizmosSelected()
-    // {
-    //     if (attackPoint == null) return;
-
-    //     Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-    
-    // }
-
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
-        if (currentHealth <= 0) Die();
+        if (currentHealth <= 0) 
+        {
+            currentHealth = 0;
+            Die();
+        }
+
     }
 
     void Die()
     {
         isDead = true;
         animator.SetBool("isDead", true);
-        this.enabled = false;
+        FindObjectOfType<GameManager>().GameOver();
+        GetComponent<Collider>().enabled = false;
+
+       // this.enabled = false;
     }
 
     public float GetCurrentHealth() { return currentHealth; }

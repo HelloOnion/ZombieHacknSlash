@@ -6,9 +6,9 @@ public class HitCheck : MonoBehaviour
 {
     public PlayerController player;
     public EnemyController enemy;
+
     private void OnTriggerEnter(Collider hit)
     {
-
         if (hit.CompareTag("Enemy"))
         {
             Debug.Log(hit.name);
@@ -16,8 +16,7 @@ public class HitCheck : MonoBehaviour
         }
         else if(hit.CompareTag("Player"))
         {
-            hit.GetComponent<PlayerController>().TakeDamage(enemy.attackDamage);
-        }
-        
+            hit.GetComponent<PlayerController>().TakeDamage(Random.Range(enemy.minAttackDmg, enemy.maxAttackDmg));
+        }  
     }
 }

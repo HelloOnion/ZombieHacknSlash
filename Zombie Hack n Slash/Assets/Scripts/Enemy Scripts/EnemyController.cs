@@ -9,7 +9,11 @@ public class EnemyController : MonoBehaviour
     public int maxHealth = 100;
     public float speed = 1f;
     public float changeStateChance = 50f;
-    public float attackDamage = 10f;
+
+    public int minAttackDmg = 5;
+    public int maxAttackDmg = 10;
+    public int attackDamage;
+
     private Animator animator;
     private int currentHealth;
 
@@ -32,11 +36,11 @@ public class EnemyController : MonoBehaviour
     public float viewAngle;
     public LayerMask targetMask;
     public LayerMask obstacleMask;
-    //[HideInInspector]
-    //public List<Transform> visibleTarget = new List<Transform>;
-
+    
     [Header("Visual FX")]
     public GameObject bloodFXPrefab;
+
+    public GameObject miniMapUI;
 
     void Start()
     {
@@ -104,18 +108,15 @@ public class EnemyController : MonoBehaviour
                 //if raycast finds player without obstacle blocking
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) 
                 {
-                    //Debug.Log("chasing");
                     //set target
                     target = targetTransform.GetComponent<PlayerController>();
                     //change state to chase
                     currentState = EnemyState.Chase;
                     targetInRange = true;
                 }
-                else //obstacle blocked (still chasing after running out of range)
+                else //obstacle blocked
                 {
-                   // Debug.Log("target lost");
                     //Search for enemy
-                    //target = null;
                     currentState = EnemyState.Wander;
                     targetInRange = false;
                 }
@@ -150,8 +151,6 @@ public class EnemyController : MonoBehaviour
         animator.SetBool("isWandering", false);
         animator.SetBool("isChasing", false);
         animator.SetBool("isAttacking", false);
-       // CheckPlayerInRange();
-        // StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
     private void WanderState()
@@ -176,9 +175,6 @@ public class EnemyController : MonoBehaviour
             Debug.Log("Path Blocked");
             GetDestination();
         }
-
-        //CheckPlayerInRange();
-        //StartCoroutine("FindTargetsWithDelay", 0.2f);
     }
 
     private void ChaseState()
@@ -196,7 +192,6 @@ public class EnemyController : MonoBehaviour
 
         transform.LookAt(target.transform);
 
-
         if (Vector3.Distance(transform.position, target.transform.position) < attackRange)
         {
             currentState = EnemyState.Attack;
@@ -205,6 +200,7 @@ public class EnemyController : MonoBehaviour
 
     private void AttackState()
     {
+        attackDamage = Random.Range(minAttackDmg, maxAttackDmg);
         //attack animation
         animator.SetBool("isWandering", false);
         animator.SetBool("isChasing", false);
@@ -262,8 +258,9 @@ public class EnemyController : MonoBehaviour
         currentHealth -= damage;
 
         Vector3 bloodPos = new Vector3(transform.position.x, 1.3f, transform.position.z);
-        //Vector3 bloodRotation = new Vector3(transform.rotation.x - transform.fo, transform.rotation.y, transform.rotation.z);
-        Instantiate(bloodFXPrefab, bloodPos, Quaternion.Euler(0,transform.rotation.y - 180,0), transform);
+        //Instantiate(bloodFXPrefab, bloodPos, Quaternion.Euler(0,transform.rotation.y - 180,0), transform);
+        Instantiate(bloodFXPrefab, bloodPos, Quaternion.FromToRotation(Vector3.up, -transform.forward));
+        
         //play hurt animation
         animator.SetTrigger("Hurt");
 
@@ -274,12 +271,15 @@ public class EnemyController : MonoBehaviour
     {
         Debug.Log("Enemy Dead!");
 
+        //add score and kill count
+        FindObjectOfType<ScoreController>().AddScore(100);
+        FindObjectOfType<ScoreController>().AddKillCount(1);
+
         isDead = true;
         //die animation
         animator.SetBool("isDead", true);
-
+        miniMapUI.SetActive(false);
         GetComponent<Collider>().enabled = false;
         this.enabled = false;
     }
-
 }

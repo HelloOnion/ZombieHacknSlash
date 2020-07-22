@@ -13,6 +13,7 @@ public class SceanManager : MonoBehaviour
     public void LoadLevel(int sceneIndex)
     {
         StartCoroutine(LoadScene(sceneIndex));
+        Time.timeScale = 1f;
     }
 
     public void QuitGame()
@@ -22,7 +23,7 @@ public class SceanManager : MonoBehaviour
 
     IEnumerator LoadScene(int sceneIndex)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 
         menuBox.SetActive(false);
         loadingScreen.SetActive(true);
@@ -35,5 +36,6 @@ public class SceanManager : MonoBehaviour
 
             yield return null;
         }
+        
     }
 }
