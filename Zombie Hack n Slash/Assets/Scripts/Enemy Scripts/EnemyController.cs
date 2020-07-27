@@ -108,7 +108,7 @@ public class EnemyController : MonoBehaviour
                 //if raycast finds player without obstacle blocking
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) 
                 {
-                    //set target
+                    //set target 
                     target = targetTransform.GetComponent<PlayerController>();
                     //change state to chase
                     currentState = EnemyState.Chase;
@@ -123,7 +123,7 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-    //FOV Editor GUI
+    //FOV Editor GUI //FOVエディターGUI
     public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
     {
 		if (!angleIsGlobal) {
@@ -258,7 +258,6 @@ public class EnemyController : MonoBehaviour
         currentHealth -= damage;
 
         Vector3 bloodPos = new Vector3(transform.position.x, 1.3f, transform.position.z);
-        //Instantiate(bloodFXPrefab, bloodPos, Quaternion.Euler(0,transform.rotation.y - 180,0), transform);
         Instantiate(bloodFXPrefab, bloodPos, Quaternion.FromToRotation(Vector3.up, -transform.forward));
         
         //play hurt animation
