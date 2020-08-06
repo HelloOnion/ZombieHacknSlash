@@ -8,8 +8,7 @@ public class PlayerUI : MonoBehaviour
     public Text healthText;
     public Image hpBar;
     
-    [SerializeField]
-    private PlayerController player;
+    public PlayerController player;
 
     void Update()
     {

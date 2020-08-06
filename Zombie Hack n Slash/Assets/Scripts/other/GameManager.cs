@@ -11,8 +11,14 @@ public class GameManager : MonoBehaviour
     public Text clearText;
     public Text gameOverText;
 
+    [Header("PauseUI")]
+    public GameObject pauseUI;
+    private bool isPaused = false;
+
     private void Awake() 
     {
+        LeanTween.scale(pauseUI.gameObject, new Vector3(0, 0, 0), 0f).setIgnoreTimeScale(true);
+
         if(gameManagerInstance != null && gameManagerInstance != this)
         {
             Destroy(this.gameObject);
@@ -20,6 +26,14 @@ public class GameManager : MonoBehaviour
         else
         {
             gameManagerInstance = this;
+        }
+    }
+
+    void Update()
+    {
+        if(!isPaused && Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();
         }
     }
 
@@ -38,5 +52,25 @@ public class GameManager : MonoBehaviour
         gameOverText.gameObject.SetActive(true);
         FindObjectOfType<ScoreController>().ShowResult();
     }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0f;
+        LeanTween.scale(pauseUI.gameObject, new Vector3(1, 1, 1), 0.4f).setIgnoreTimeScale(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        isPaused = true;
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        LeanTween.scale(pauseUI.gameObject, new Vector3(0, 0, 0), 0.4f).setIgnoreTimeScale(true);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        isPaused = false;
+    }
+
+    
 
 }
