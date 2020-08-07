@@ -147,7 +147,6 @@ public class EnemyController : MonoBehaviour
 
     private void IdleState()
     {
-        //Idele Animation
         animator.SetBool("isWandering", false);
         animator.SetBool("isChasing", false);
         animator.SetBool("isAttacking", false);
@@ -155,7 +154,6 @@ public class EnemyController : MonoBehaviour
 
     private void WanderState()
     {
-        //walk animation
         animator.SetBool("isWandering", true);
         animator.SetBool("isChasing", false);
         animator.SetBool("isAttacking", false);
@@ -179,7 +177,6 @@ public class EnemyController : MonoBehaviour
 
     private void ChaseState()
     {
-        //chase animation
         animator.SetBool("isWandering", false);
         animator.SetBool("isChasing", true);
         animator.SetBool("isAttacking", false);
@@ -205,6 +202,12 @@ public class EnemyController : MonoBehaviour
         animator.SetBool("isWandering", false);
         animator.SetBool("isChasing", false);
         animator.SetBool("isAttacking", true);
+
+        if(target == null)
+        {
+            currentState = EnemyState.Idle;
+            return;
+        }
     }
 
     private bool IsPathBlocked()

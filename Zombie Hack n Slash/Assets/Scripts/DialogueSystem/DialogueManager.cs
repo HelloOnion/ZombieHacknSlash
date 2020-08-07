@@ -20,11 +20,10 @@ public class DialogueManager : MonoBehaviour
         LeanTween.scale(dialogueImage.gameObject, new Vector3(0,0,0), 0f);
     }
 
-    public void StartDialogue(Dialogue dialogue)
+    public void StartDialogue(Dialogue dialogue)//ダイアログを始まる
     {
         isGameClear = dialogue.gameClear;
 
-        //TODO:pause game and Animate dialogue box in/ show cursor
         LeanTween.scale(dialogueImage.gameObject, new Vector3(1,1,1), 0.4f).setIgnoreTimeScale(true);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -42,9 +41,9 @@ public class DialogueManager : MonoBehaviour
         DisplayNextSentence();
     }
 
-    public void DisplayNextSentence()
+    public void DisplayNextSentence()//次の文をディスプレーする
     {
-        if(sentences.Count == 0)
+        if(sentences.Count == 0)//sentences に文をなくなったらダイアログを終了
         {
             EndDialogue();
             return;
@@ -55,7 +54,7 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(TypeSentence(sentence));
     }
 
-    IEnumerator TypeSentence(string sentence)
+    IEnumerator TypeSentence(string sentence)//文を1字ずつ書く
     {
         dialogueText.text = "";
         foreach(char letter in sentence.ToCharArray())
@@ -65,11 +64,11 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private void EndDialogue()
+    private void EndDialogue()//ダイアログを終了する
     {
         if(isGameClear)
         {
-            //GameClear Scene
+            //クリア画面へ進む
             FindObjectOfType<GameManager>().GameClear();
         }
         else
@@ -79,7 +78,6 @@ public class DialogueManager : MonoBehaviour
             Time.timeScale = 1;
         }
 
-        //Animate dialogue box out and un pause game
         LeanTween.scale(dialogueImage.gameObject, new Vector3(0,0,0), 0.4f).setIgnoreTimeScale(true);
         Debug.Log("Dialogue Ended");
     }
