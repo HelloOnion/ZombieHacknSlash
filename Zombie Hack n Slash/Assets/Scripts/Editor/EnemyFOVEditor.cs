@@ -13,15 +13,5 @@ public class EnemyFOVEditor : Editor
 
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngleA *  fov.viewRadius);
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngleB *  fov.viewRadius);
-
-        Handles.color = Color.red;
-         if(fov.targetInRange)
-         {
-             Handles.DrawLine(fov.transform.position, fov.GetTargetPosition());
-         }
-        // else
-        // {
-        //     Handles.DrawLine(fov.transform.position, Vector3.zero);
-        // }
     }
 }

@@ -5,15 +5,15 @@ using UnityEngine;
 public class LightFlicker : MonoBehaviour
 {
     public Light lightObj;
-    [Tooltip("Turn　Lights On/Off")]
+    //Turn　Lights On/Off
     [Header("On/Off")]
     public bool lightOn = true;
-    [Tooltip("Turn Flickering Lights On/Off")]
+    //Turn Flickering Lights On/Off
     public bool flicker = true;
     [Header("Intensity")]
     public float minIntensity = 0;
     public float maxIntensity = 100f;
-    [Tooltip("Smooth out Randomness: low value = sparks; high value = lantern")]
+    //Smooth out Randomness: low value = sparks; high value = lantern
     [Range(1,50)]
     public int smoothing = 20;
 

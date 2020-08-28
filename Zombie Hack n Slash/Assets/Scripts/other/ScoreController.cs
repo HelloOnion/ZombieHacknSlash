@@ -42,7 +42,6 @@ public class ScoreController : MonoBehaviour
 
     public void ShowResult()
     {
-        //scoreBoard.SetActive(true);
         LeanTween.scale(scoreBoard.gameObject, new Vector3(1, 1, 1), 0.4f).setIgnoreTimeScale(true);
         StopAllCoroutines();
         StartCoroutine(ScoreCount());
