@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public int attackDamage = 40;
     public float attackRate = 2f;
     public Collider hitCollider;
+    public float skillRadius;
     private int minLightDmg = 5;
     private int maxLightDmg = 20;
     private int minHeavyDmg = 20;
@@ -89,7 +90,7 @@ public class PlayerController : MonoBehaviour
             }
             
             //damage debug test
-            if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
+           // if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
         }
     }
     
@@ -168,6 +169,13 @@ public class PlayerController : MonoBehaviour
         attackDamage = Random.Range(minHeavyDmg, maxHeavyDmg);
         //heavy attack Animation
         animator.SetTrigger("HeavyAttack");
+    }
+
+    void AOEAttack()
+    {
+        //instantiate effect
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, skillRadius); 
     }
 
     public void TakeDamage(int damage)
