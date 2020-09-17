@@ -27,7 +27,7 @@ public class EnemySpawn : MonoBehaviour
 
             for(int i = 0; i< pool.size; i++)
             {
-                GameObject obj = Instantiate(pool.prefab)
+                GameObject obj = Instantiate(pool.prefab);
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }
