@@ -171,12 +171,20 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("HeavyAttack");
     }
 
-    void AOEAttack()
-    {
-        //instantiate effect
+    // void AOEAttack()
+    // {
+    //     //instantiate effect
 
-        Collider[] colliders = Physics.OverlapSphere(transform.position, skillRadius); 
-    }
+    //     Collider[] colliders = Physics.OverlapSphere(transform.position, skillRadius);
+    //     foreach(Collider nearbyObj in colliders)
+    //     {
+    //         Rigidbody rb = nearbyObj.GetComponent<Rigidbody>();
+    //         if(rb != null)
+    //         {
+                
+    //         }
+    //     }
+    // }
 
     public void TakeDamage(int damage)
     {
