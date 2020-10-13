@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
     public float attackRate = 2f;
     public Collider hitCollider;
     public float skillRadius;
+    public List<Transform> enemyList = new List<Transform>();
+    private Transform target;
     private int minLightDmg = 5;
     private int maxLightDmg = 20;
     private int minHeavyDmg = 20;
@@ -88,9 +90,6 @@ public class PlayerController : MonoBehaviour
                     nextAttackTime = Time.time + 1f / attackRate;
                 }
             }
-            
-            //damage debug test
-           // if (Input.GetKeyDown(KeyCode.G)) TakeDamage(20);
         }
     }
     
@@ -110,8 +109,6 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-
-            //controller.Move(moveDir.normalized * speed * Time.deltaTime);
         }
 
 
@@ -157,8 +154,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void AssignNearestTarget()
+    {
+        if(enemyList.Count < 1) 
+        {
+            return;
+        }
+
+        float[] distances = new float[enemyList.Count];
+
+        for(int i = 0; i < enemyList.Count; i++)
+        {
+            distances[i] = Vector3.Distance(transform.position, enemyList[0].position);
+        }
+
+        float minDistance = Mathf.Min(distances);
+        int index = 0;
+
+        for (int i = 0; i < distances.Length; i++)
+        {
+            if (minDistance == distances[i])
+                index = i;
+        }
+
+        target = enemyList[index];
+    }
+
     void LightAttack()
     {
+        target = null;
+        AssignNearestTarget();
+        if(target != null)
+            transform.DOLookAt(target.position, 0.1f);
+
         attackDamage = Random.Range(minLightDmg, maxLightDmg);
         //light attack Animation
         animator.SetTrigger("LightAttack");
@@ -166,25 +194,15 @@ public class PlayerController : MonoBehaviour
 
     void HeavyAttack()
     {
+        target = null;
+        AssignNearestTarget();
+        if(target != null)
+            transform.DOLookAt(target.position, 0.1f);
+
         attackDamage = Random.Range(minHeavyDmg, maxHeavyDmg);
         //heavy attack Animation
         animator.SetTrigger("HeavyAttack");
     }
-
-    // void AOEAttack()
-    // {
-    //     //instantiate effect
-
-    //     Collider[] colliders = Physics.OverlapSphere(transform.position, skillRadius);
-    //     foreach(Collider nearbyObj in colliders)
-    //     {
-    //         Rigidbody rb = nearbyObj.GetComponent<Rigidbody>();
-    //         if(rb != null)
-    //         {
-                
-    //         }
-    //     }
-    // }
 
     public void TakeDamage(int damage)
     {
@@ -195,7 +213,6 @@ public class PlayerController : MonoBehaviour
             currentHealth = 0;
             Die();
         }
-
     }
 
     void Die()

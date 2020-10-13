@@ -261,7 +261,6 @@ public class EnemyController : MonoBehaviour
         currentHealth -= damage;
 
         Vector3 bloodPos = new Vector3(transform.position.x, 1.3f, transform.position.z);
-        //Instantiate(bloodFXPrefab, bloodPos, Quaternion.Euler(0,transform.rotation.y - 180,0), transform);
         Instantiate(bloodFXPrefab, bloodPos, Quaternion.FromToRotation(Vector3.up, -transform.forward));
         
         //play hurt animation
@@ -282,6 +281,7 @@ public class EnemyController : MonoBehaviour
         //die animation
         animator.SetBool("isDead", true);
         miniMapUI.SetActive(false);
+        target.enemyList.Remove(transform);
         GetComponent<Collider>().enabled = false;
         this.enabled = false;
     }
